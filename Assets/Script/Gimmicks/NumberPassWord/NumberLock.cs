@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -7,18 +6,28 @@ using UnityEngine.UI;
 public class NumberLock : MonoBehaviour
 {
     [SerializeField]
+    [Tooltip("パスワードリスト")]
     private List<Button> passWordButtonList;
 
-    public GameObject door;
+    [SerializeField]
+    [Tooltip("エンターボタン")]
+    private Button enterButton;
 
     [SerializeField]
-    private Button enterButton;
+    [Tooltip("リセットボタン")]
+    private Button resetbutton;
+
+    [SerializeField]
+    [Tooltip("パスワード入力画面")]
+    private GameObject passWordWindow;
 
 
     private string currentInput = "";
     private string correctCode = "1234";
 
-    public bool IsOpen;
+
+    //ボタンが空いたか
+    public bool IsOpen { get; private set; }
 
 
     private void Start()
@@ -33,6 +42,18 @@ public class NumberLock : MonoBehaviour
             passWordButtonList[i].onClick.AddListener(() => AddDigit(index.ToString()));
         }
 
+        resetbutton.onClick.AddListener(() => ResetInput());
+    }
+
+    /// <summary>
+    /// 閉じるボタンの実行
+    /// </summary>
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            passWordWindow.SetActive(false);
+        }
     }
 
     public void AddDigit(string digit)
@@ -53,7 +74,8 @@ public class NumberLock : MonoBehaviour
             Debug.Log("正解！");
 
             IsOpen = true;
-            
+
+            passWordWindow.SetActive(false);
         }
         else
         {
@@ -62,15 +84,8 @@ public class NumberLock : MonoBehaviour
         }
     }
 
-    void OpenDoor()
+    void ResetInput()
     {
-        if(door != null)
-        {
-            door.transform.position += new Vector3(0, 2, 0);
-        }
-        else
-        {
-            Debug.Log("※ドアがまだ設定されていません！");
-        }
+        currentInput =  "";
     }
 }

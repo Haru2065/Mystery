@@ -15,7 +15,7 @@ public class LightController : MonoBehaviour
     /// <summary>
     ///　グローバルライトを明るくするメソッド
     /// </summary>
-    void SetBright()
+    public void SetBright()
     {
         globalLight.intensity = 1f;
     }
@@ -23,7 +23,7 @@ public class LightController : MonoBehaviour
     /// <summary>
     /// グローバルライトを暗くするメソッド
     /// </summary>
-    void setDark()
+    public void setDark()
     {
         globalLight.intensity = 0f;
     }
