@@ -25,11 +25,34 @@ public class InventoryUIController : MonoBehaviour
     [Header("使用ボタン")]
     public Button useButton;
 
-    [Header("インベントリアイコン")]
+    [Header("右側のUI")]
+
     [SerializeField]
+    [Tooltip("アイテム名を表示するタグ")]
+    private GameObject itemNameObject;
+
+    [SerializeField]
+    [Tooltip("親元アイテムアイコン")]
+    private GameObject mainItemIcon;
+
+    [SerializeField]
+    [Tooltip("イメージアイテムアイコン")]
+    private Image itemIcon;
+
+    [SerializeField]
+    [Tooltip("アイテム情報欄")]
+    private GameObject itemDescriptionObject;
+
+    [Header("インベントリを開くアイコン")]
+
+    [SerializeField]
+    [Tooltip("インベントリアイコン")]
     private GameObject inventoryIcon;
 
+
     private ItemStatus selectedItem = null;
+
+    [SerializeField]
     private List<ItemStatus> currentItems;
 
 
@@ -37,29 +60,71 @@ public class InventoryUIController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        inventoryIcon.SetActive(true);
+        //各インベントリUIを非表示
+        mainItemIcon.SetActive(false);
+        itemNameObject.SetActive(false);
+        itemDescriptionObject.SetActive(false);
 
-        useButton.onClick.AddListener(() => OnClickUseItem());
+        itemIconImage.gameObject.SetActive(false);
 
+        //アイテムスロットをすべて非表示
         foreach (var button in slotButtons)
         {
             button.gameObject.SetActive(false);
         }
 
+        //スロットアイコンも非表示
         foreach(var slots in slotIcons)
         {
             slots.gameObject.SetActive(false);
         }
 
-        itemIconImage.gameObject.SetActive(false);
+        //使用するボタンを非表示
+        useButton.gameObject.SetActive(false);
 
-        
+        useButton.onClick.AddListener(() => OnClickUseItem());
 
-
-
-        useButton.gameObject.SetActive(true);
+        //インベントリアイコンを表示
+        inventoryIcon.SetActive(true);
 
         RefreshUI();
+    }
+
+    private void Update()
+    {
+        if (currentItems.Count > 0)
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                //各インベントリUIを非表示
+                mainItemIcon.SetActive(true);
+                itemNameObject.SetActive(true);
+                itemDescriptionObject.SetActive(true);
+
+                itemIconImage.gameObject.SetActive(true);
+
+                //アイテムスロットをすべて非表示
+                foreach (var button in slotButtons)
+                {
+                    button.gameObject.SetActive(true);
+                }
+
+                //スロットアイコンも非表示
+                foreach (var slots in slotIcons)
+                {
+                    slots.gameObject.SetActive(true);
+                }
+
+                //使用するボタンを非表示
+                useButton.gameObject.SetActive(true);
+                
+                //インベントリアイコンを表示
+                inventoryIcon.SetActive(false);
+
+                RefreshUI();
+
+            }
+        }
     }
 
     public void RefreshUI()
